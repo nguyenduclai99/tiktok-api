@@ -1,0 +1,19 @@
+image: node:14.17.3
+
+before_script:
+  - cp .env.example .env
+  - npm install
+
+cache:
+  paths:
+    - node_modules/
+
+pages:
+  script:
+    - npm run start
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+

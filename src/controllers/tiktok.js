@@ -1,7 +1,7 @@
 'use strict'
 
 import { configAxiosTiktok } from '../config/config.js';
-import { checkDomain } from '../common/helper.js'
+import { checkDomain, logCallApi } from '../common/helper.js'
 import axios from 'axios';
 
 const client = axios.create(configAxiosTiktok);
@@ -12,13 +12,14 @@ const CLIENT_KEY = process.env.CLIENT_KEY;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
 const videoDetailTiktokByUrl = async (req, res) => {
+    logCallApi(req)
     let url = req.query.url
     let debug = req.query.debug
 
     if (!checkDomain(req) && !debug) {
         res.status(400).send({
             code: 400,
-            message: 'Domain name is not allowed',
+            message: 'Domain is not allowed',
             data: null
         })
     } else {
@@ -29,17 +30,15 @@ const videoDetailTiktokByUrl = async (req, res) => {
         }).then(function (response) {
             let status = 200;
             let data = response.data
+            let message = "Success";
             if (response.data.status == "failed") {
                 status = 400
-                data = {
-                    code: status,
-                    message: `The ${url} format is invalid`,
-                    data: null
-                }
+                message = `The ${url} format is invalid`
+                data = null
             }
             res.status(status).send({
                 code: status,
-                message: "Success",
+                message: message,
                 data: data
             })
         })

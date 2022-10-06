@@ -2,7 +2,7 @@
 
 import { logsCallApi } from './../models/logsCallApi.js'
 
-const listDomainAccess = ['https://1989smedia.com'];
+const listDomainAccess = ['https://1989smedia.com','https://www.mualikegiare.xyz', 'https://mualikegiare.xyz'];
 
 const checkDomain = (req) => {
     let origin = req.get('origin')

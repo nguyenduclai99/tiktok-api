@@ -59,13 +59,13 @@ const createLog = async (req, res) => {
 const listLogs = async (req, res) => {
     let debug = req.body.debug
 
-    if (!checkDomain(req) && !debug) {
-        res.status(400).send({
-            code: 400,
-            message: 'Domain is not allowed',
-            data: null
-        })
-    } else {
+//     if (!checkDomain(req) && !debug) {
+//         res.status(400).send({
+//             code: 400,
+//             message: 'Domain is not allowed',
+//             data: null
+//         })
+//     } else {
         try {
             await logsCallApi.find()
             .then(docs => {
@@ -91,7 +91,7 @@ const listLogs = async (req, res) => {
             })
             console.log(error)
         }
-    }
+//     }
 }
 
 export { createLog, listLogs }

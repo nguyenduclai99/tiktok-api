@@ -57,41 +57,68 @@ const createLog = async (req, res) => {
 }
 
 const listLogs = async (req, res) => {
-    let debug = req.body.debug
+    let debug = req.query.debug
+    let limit = req.query.limit
+    let page = req.query.page
+    let skip = 0;
 
-//     if (!checkDomain(req) && !debug) {
-//         res.status(400).send({
-//             code: 400,
-//             message: 'Domain is not allowed',
-//             data: null
-//         })
-//     } else {
+    if (!limit) limit = 10;
+    if (!page || page == 0) {
+        page = 1
+        skip = 0
+    } else {
+        skip = limit * (page - 1)
+    };
+
+    // if (!checkDomain(req) && !debug) {
+    //     res.status(400).send({
+    //         code: 400,
+    //         message: 'Domain is not allowed',
+    //         data: null
+    //     })
+    // } else {
         try {
+            let total = await logsCallApi.count()
             await logsCallApi.find()
+            .limit(limit)
+            .skip(skip)
             .then(docs => {
                 res.status(200).send({
                     code: 200,
                     message: "Success",
-                    data: docs
+                    data: docs,
+                    total: total,
+                    page: parseInt(page),
+                    next_page: parseInt(page) + 1,
+                    limit: parseInt(limit),
+                    total_page: Math.ceil(total/limit),
                 })
             })
             .catch(err => {
-                res.status(400).send({
-                    code: 400,
-                    message: "Bad request",
-                    data: null
+                res.status(500).send({
+                    code: 500,
+                    message: err.message,
+                    data: null,
+                    total: 0,
+                    page: parseInt(page),
+                    next_page: parseInt(page),
+                    limit: parseInt(limit),
+                    total_page: 0,
                 })
-                console.error(err)
             })
         } catch (error) {
             res.status(500).send({
                 code: 500,
-                message: "Server errros.",
-                data: null
+                message: error.message,
+                data: null,
+                total: 0,
+                page: parseInt(page),
+                next_page: parseInt(page),
+                limit: parseInt(limit),
+                total_page: 0,
             })
-            console.log(error)
         }
-//     }
+    // }
 }
 
 export { createLog, listLogs }

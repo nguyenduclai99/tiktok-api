@@ -16,13 +16,13 @@ const videoDetailTiktokByUrl = async (req, res) => {
     let url = req.query.url
     let debug = req.query.debug
 
-    if (!checkDomain(req) && !debug) {
-        res.status(400).send({
-            code: 400,
-            message: 'Domain is not allowed',
-            data: null
-        })
-    } else {
+    // if (!checkDomain(req) && !debug) {
+    //     res.status(400).send({
+    //         code: 400,
+    //         message: 'Domain is not allowed',
+    //         data: null
+    //     })
+    // } else {
         await client.get('/api', {
             params: {
                 url
@@ -45,12 +45,11 @@ const videoDetailTiktokByUrl = async (req, res) => {
         .catch(function (error) {
             res.status(500).send({
                 code: 500,
-                message: "The system is busy, please try again later.",
+                message: error.message,
                 data: null
             })
         })
-    }
-    
+    // }
 }
 
 const oauth = (req, res) => {

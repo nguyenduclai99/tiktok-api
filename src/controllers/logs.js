@@ -4,28 +4,17 @@ import { logsApi } from "../models/logs.js"
 import { io } from './../../index.js'
 
 const createLogV2 = async (req, res) => {
-   
-        let ip = req.ip
-        || req.connection.remoteAddress
-        || req.socket.remoteAddress
-        || req.connection.socket.remoteAddress;
-    let created_at = new Date().toISOString();
-    let headers = req.headers;
-    let end_point = req.body.end_point ?? ''
     let log = {
-        ip,
-        headers,
-        end_point,
-        created_at
+        params: req.body
     }
 
     let logging = new logsApi(log)
     logging.save()
-    io.emit('logs_create', log)
+    io.emit('logs_create', log.params)
     res.status(200).send({
         code: 200,
         message: "Success",
-        data: logging
+        data: log.params
     })
 }
 

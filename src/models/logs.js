@@ -1,18 +1,9 @@
 import mongoose from 'mongoose';
 
 const logs = new mongoose.Schema({
-    ip: {
-        type: String
-    },
-    headers: {
+    params: {
         type: Object
     },
-    end_point: {
-        type: String
-    },
-    created_at: {
-        type: String
-    }
 })
 
 const logsApi = mongoose.model("logs", logs);

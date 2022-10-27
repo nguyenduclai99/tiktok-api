@@ -2,6 +2,8 @@
 
 import { videoDetailTiktokByUrl, oauth, redirect } from './src/controllers/tiktok.js';
 import { createLog, listLogs } from './src/controllers/logging.js';
+import { createLogV2, listLogsV2 } from './src/controllers/logs.js';
+
 import path from "path";
 
 const routes = (app) => {
@@ -12,6 +14,10 @@ const routes = (app) => {
 
     app.route('/api/v1/logs/create').post(createLog);
     app.route('/api/v1/logs').get(listLogs);
+
+    app.route('/api/v2/logs/create').post(createLogV2);
+    app.route('/api/v2/logs').get(listLogsV2);
+
     app.get("/logs.html", async (req, res) => {
         res.sendFile(path.resolve("./static/logs.html"));
     });
@@ -20,6 +26,13 @@ const routes = (app) => {
     });
     app.get("/js/pagination.js", async (req, res) => {
         res.sendFile(path.resolve("./static/js/pagination.js"));
+    });
+
+    app.get('/chat.html', async (req, res) => {
+        res.sendFile(path.resolve("./static/chat.html"));
+    })
+    app.get("/socket.io/socket.io.js", async (req, res) => {
+        res.sendFile(path.resolve("./node_modules/socket.io/client-dist/socket.io.js"));
     });
 }
 

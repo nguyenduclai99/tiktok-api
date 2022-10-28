@@ -9,6 +9,7 @@ import { connectDB } from './src/config/database.js'
 import http from 'http';
 import { Server} from 'socket.io';
 import os from 'os';
+import { logsApi } from "./src/models/logs.js"
 
 dotenv.config();
 const app = express();
@@ -39,8 +40,13 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
     console.log('A user is connected');
   
-    socket.on('message', (message) => {
-      console.log(`message from ${socket.id} : ${message}`);
+    socket.on('create_log', (params) => {
+        let log = {
+            params: params
+        }
+        let logging = new logsApi(log)
+        logging.save()
+        io.emit('log', log)
     })
   
     socket.on('disconnect', () => {
